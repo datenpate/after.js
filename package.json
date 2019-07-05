@@ -18,7 +18,7 @@
     "loadInitialProps.js"
   ],
   "scripts": {
-    "prepare": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json",
     "start": "tsc -p tsconfig.build.json -w",
     "format": "prettier --trailing-comma es5 --single-quote --write 'packages/*/*.js' 'packages/*/!(node_modules)/**/*.js'",
     "precommit": "lint-staged",
