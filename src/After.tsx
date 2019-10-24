@@ -71,7 +71,18 @@ class Afterparty extends React.Component<AfterpartyProps, AfterpartyState> {
   }
 
   componentDidUpdate(_prevProps: AfterpartyProps, prevState: AfterpartyState) {
-    const navigated = prevState.currentLocation !== this.state.currentLocation;
+    const { currentLocation } = this.state;
+
+    // bail out early for in page anchor links
+    const inPageNavigated =
+      prevState.currentLocation &&
+      currentLocation &&
+      currentLocation.hash &&
+      prevState.currentLocation.pathname == currentLocation.pathname;
+    if (inPageNavigated) {
+      return;
+    }
+    const navigated = prevState.currentLocation !== currentLocation;
     if (navigated) {
       const {
         location,
@@ -89,13 +100,7 @@ class Afterparty extends React.Component<AfterpartyProps, AfterpartyState> {
         ...rest,
       })
         .then(({ data }) => {
-          // Only for page changes, prevent scroll up for anchor links
-          if (
-            (prevState.previousLocation &&
-              prevState.previousLocation.pathname) !== location.pathname
-          ) {
-            window.scrollTo(0, 0);
-          }
+          window.scrollTo(0, 0); // scroll to the page top
           this.setState({ previousLocation: null, data });
         })
         .catch(e => {
